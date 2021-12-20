@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ConcentrationViewController: UIViewController {
 
     private lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
     // 강의에서는 (cardButtons.count+1) / 2라 했음
@@ -30,8 +30,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("in viewDidLoad game.cards.count : \(game.cards.count)")
-        print("in viewDidLoad game.indexOfThe... : \(game.indexOfTheOneAndOnlyFaceUpCard)")
+      
         // Do any additional setup after loading the view.
     }
 
@@ -48,8 +47,7 @@ class ViewController: UIViewController {
         } else {
             print("choose proper card")
         }
-        print("number of CardButton \(cardButtons.count)")
-        
+
     }
     
     private func updateViewFromModel() {
@@ -66,23 +64,28 @@ class ViewController: UIViewController {
         }
     }
     
-    private var emojiChoices = ["👻", "🎃", "🤡", "☠️","👽","👹","👺","💀","👁"]
+//    var theme: String? {
+//        didSet {
+//            emojiChoices = theme ?? ""
+//            emoji = [:]
+//            updateViewFromModel()
+//        }
+//    }
+    
+//    private var emojiChoices = ["👻", "🎃", "🤡", "☠️","👽","👹","👺","💀","👁"]
+    private var emojiChoices = "👻🎃🤡☠️👽👹👺💀👁🌜🌞"
     
 //    var emoji =  Dictionary<Int, String>()
-    private var emoji = [Int:String]() //Same as above statement of Dictionary
+    private var emoji = [Card:String]() //Same as above statement of Dictionary
     
     private func emoji(for card: Card) -> String {
-        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
-            //extention 추가후 아래 let 부분 지움
-//            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)) )
-            //extention 추가후 아래 주석이 바뀜
-//            emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
-            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        print("before if emogi : \(emoji[card])")
+        if emoji[card] == nil, emojiChoices.count > 0 {
+            let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: emojiChoices.count.arc4random) //emoiChoces를 string으로
+            emoji[card] = String(emojiChoices.remove(at: randomStringIndex))
+            print("emoji[card] ****** = \(emoji)")
         }
-//        if emoji[card.identifier] != nil {
-//            return emoji[card.identifier]!
-//        } else {return "?"}
-        return emoji[card.identifier] ?? "?" //위에 주석이랑 정확히 같은 표현
+        return emoji[card] ?? "?" //위에 주석이랑 정확히 같은 표현
     }
 }
 
@@ -91,7 +94,7 @@ extension Int {
         if self > 0 {
             return Int(arc4random_uniform(UInt32(self)))
         } else if self < 0 {
-            return -Int(arc4random_uniform(UInt32(self)))
+            return -Int(arc4random_uniform(UInt32(abs(self))))
         } else {
             return 0
         }
